@@ -1,0 +1,5 @@
+codigo->letra op
+codigo->letra letra op
+codigo->op letra 
+letra->a,b,c,d
+op->y,o
