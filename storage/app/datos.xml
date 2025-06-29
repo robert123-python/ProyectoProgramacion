@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datos>
+    <CrearModelos>crear modelo</CrearModelos>
+    <ContarObjetos>objetos</ContarObjetos>
+    <Usuario>usuario</Usuario>
+    <IdentificarImagen>identificar imagen</IdentificarImagen>
+    <MisModelos>mis modelos</MisModelos>
+    <CerrarSesion>cerrar seccion</CerrarSesion>
+    <Contar>contar</Contar>
+    <CambiarComando>cambiar comando</CambiarComando>
+    <Inicio>inicio</Inicio>
+</datos>
