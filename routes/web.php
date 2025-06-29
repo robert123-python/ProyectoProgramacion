@@ -8,6 +8,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Opencv\ModeloController;
 use App\Http\Controllers\conteoController;
 use App\Http\Controllers\freeController;
+use Illuminate\Http\Request;
 
 Route::get('/login/log', [Logger::class, 'login_view'])->name('auth.login');
 Route::post('/login', [Logger::class, 'login']);
@@ -58,6 +59,35 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/conteos/actualizar', [conteoController::class, 'actualizarManual'])->name('conteos.actualizar');
     Route::get('/estadisticas', [conteoController::class, 'verEstadisticas'])->name('estadisticas.ver');
 });
+
+//use Illuminate\Http\Request;
+Route::get('/CambiarComando', function () {
+    return view('CambiarComando');
+});
+Route::post('/actualizar-xml', function (Request $request) {
+    $request->validate([
+        'comando' => 'required|string',
+        'nuevo_valor' => ['required', 'regex:/^[a-záéíóúñ\s]+$/i'],
+    ]);
+    
+    $xmlPath = storage_path('app/datos.xml');
+    $xml = new DOMDocument();
+    $xml->load($xmlPath);
+    
+    // Actualizar solo el campo seleccionado
+    $campo = $xml->getElementsByTagName($request->comando)->item(0);
+    if (!$campo) {
+        return back()->withErrors(['comando' => 'El campo no existe en el XML.']);
+    }
+    $campo->nodeValue = $request->nuevo_valor;
+    
+    $xml->save($xmlPath);
+    
+    return back()->with([
+        'xml_actualizado' => $xml->saveXML()
+    ]);
+})->name('actualizar.xml');
+
 
 Route::get('/', function () {
     return view('free');

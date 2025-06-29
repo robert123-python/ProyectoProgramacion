@@ -25,8 +25,12 @@
             <input type="email" name="email" placeholder="Correo electrónico" required>
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Iniciar sesión</button>
-            
         </form>
+
+        <!-- Enlace a registro -->
+        <div class="register-link">
+            <p>¿No tienes una cuenta? <a href="{{ route('usuarios') }}">Regístrate aquí</a></p>
+        </div>
     </div>
 </body>
 </html>

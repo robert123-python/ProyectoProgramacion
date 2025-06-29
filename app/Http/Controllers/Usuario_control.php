@@ -18,7 +18,7 @@ class Usuario_control extends Controller
     public function guardar(Request $requerido) {
         $requerido->validate([
             'name'=> 'required',
-            'email' => 'required|email|unique:users',
+            'email' => ['required', 'regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/', 'unique:users'],
             'password' => 'required|min:6',
 
         ]);

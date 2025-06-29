@@ -25,15 +25,7 @@
         <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-door-closed"></i> Cerrar Sesion </a>
         <a id="btn-asistente" class="nav-link" href="#"><i class="fas fa-microphone"></i> Asistente de Voz</a>
         <a id="btn-video" href="#" class="nav-link"><i class="fas fa-video"></i> Comandos por Video</a>
-        <div class="comando" >
-            <a onclick="abrir()">Cambiar Comando</a>        
-            <div class="menu" id="menu">
-                    <input type="text" id="comandoantiguo" placeholder="Introdusca el antiguo comando">
-                    <input type="text" id="comandonuevo" placeholder="introdusca el nuevo comando">
-                    <button class="cancelar" type="submit">Guardar</button>
-                    <button class="cancelar" type="button" onclick="cerrar()">Cancelar</button>
-            </div>
-        </div>
+        <a href="/CambiarComando"><i class="fa-solid fa-repeat"></i>Cambiar Comando</a>
         <!--<div class="dropdown">
             <a href="#">Servicios ▸</a>
             <div class="submenu">
@@ -74,47 +66,47 @@ document.addEventListener("DOMContentLoaded", function () {
         synth.speak(utterance);
     }
 
-    recognition.onresult = function (event) {
+    recognition.onresult = function (event) {        
         const comando = event.results[0][0].transcript.toLowerCase();
         console.log("Comando detectado:", comando);
 
         const textoParaAnalizar = "Este es un texto de ejemplo para contar objetos y verificar si existen palabras.";
-
+        const comandosXML = @json($datosC);
         // ✅ 1. Comandos de navegación primero (contar objetos)
-        if (comando.includes("contar objetos")) {
+        if (comando.includes(comandosXML.ContarObjetos)) {
             hablar("Redirigiendo a contar objetos");
             window.location.href = "{{ route('modelos.contarVista') }}";
 
-        } else if (comando.includes("usuarios") || comando.includes("usuario")) {
+        } else if (comando.includes(comandosXML.Usuario) || comando.includes("usuario")) {
             hablar("Abriendo la sección de usuario");
             window.location.href = "/infoUser";
 
-        } else if (comando.includes("crear modelo")) {
+        } else if (comando.includes(comandosXML.CrearModelos)) {
             hablar("Redirigiendo a crear modelo");
             window.location.href = "{{ route('modelos.crear') }}";
 
-        } else if (comando.includes("identificar imagen")) {
+        } else if (comando.includes(comandosXML.IdentificarImagen)) {
             hablar("Redirigiendo a identificar imagen");
             window.location.href = "{{ route('modelos.predecir') }}";
 
-        } else if (comando.includes("mis modelos")) {
+        } else if (comando.includes(comandosXML.MisModelos)) {
             hablar("Mostrando tus modelos");
             window.location.href = "{{ route('modelos.index') }}";
 
-        } else if (comando.includes("inicio")) {
+        } else if (comando.includes(comandosXML.Inicio)) {
             hablar("Volviendo al inicio");
             window.location.href = "{{ route('Inicio') }}";
 
-        } else if (comando.includes("cerrar sesión") || comando.includes("cerrar sesion")) {
+        } else if (comando.includes(comandosXML.CerrarSesion) || comando.includes("cerrar sesion")) {
             hablar("Cerrando sesión");
             document.getElementById('logout-form').submit();
 
         // ✅ 2. Comandos que usan la librería PHP (contar palabra o existencia)
-        } else if (comando.includes("contar") || comando.includes("existe")) {
+        } else if (comando.includes(comandosXML.Contar) || comando.includes("existe")) {
              fetch('/procesarComando.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `comando=${encodeURIComponent(comando)}&texto=${encodeURIComponent(textoParaAnalizar)}`
+                    body: comando=${encodeURIComponent(comando)}&texto=${encodeURIComponent(textoParaAnalizar)}
                 })
             .then(response => response.json())
             .then(data => {
@@ -126,6 +118,10 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         // ❌ 3. Comando no reconocido
+        } else if (comando.includes(comandosXML.CambiarComando)) {
+            hablar("Redirigiendo a Cambiar Comando");
+            window.location.href = "/CambiarComando";
+
         } else {
             hablar("No reconozco ese comando");
             alert("Comando no reconocido: " + comando);
@@ -158,21 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 </script>
-<script>
-    const cambiarcomando = document.getElementById('menu');
 
-        function abrir() {
-            cambiarcomando.style.display = 'block';
-        }
-
-        function cerrar() {
-            cambiarcomando.style.display = 'none';
-        }
-
-        document.getElementById('formComando').addEventListener('submit', function(e){
-            cerrar();
-        });
-        </script>
 
 </body>
 </html>

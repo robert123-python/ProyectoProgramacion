@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/usuarios.css') }}">
 </head>
 <body>
-    <a href="/Lista" class="back-button">← Atrás</a>
+    <a href="javascript:history.back()" class="back-button">← Atrás</a>
     <div class="user-container">
     <h1>Crear Usuario</h1>
 
